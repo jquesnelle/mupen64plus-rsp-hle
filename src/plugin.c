@@ -27,6 +27,10 @@
 #include "common.h"
 #include "hle.h"
 
+#ifdef M64P_STATIC_PLUGINS
+#define M64P_CORE_PROTOTYPES 1
+#include "rsp-hle_static.h"
+#endif
 #define M64P_PLUGIN_PROTOTYPES 1
 #include "m64p_types.h"
 #include "m64p_common.h"
@@ -126,7 +130,13 @@ void HleShowCFB(void* UNUSED(user_defined))
 
 
 /* DLL-exported functions */
-EXPORT m64p_error CALL PluginStartup(m64p_dynlib_handle UNUSED(CoreLibHandle), void *Context,
+EXPORT m64p_error CALL 
+#ifdef M64P_STATIC_PLUGINS
+PluginStartupRSP
+#else
+PluginStartup
+#endif
+(m64p_dynlib_handle UNUSED(CoreLibHandle), void *Context,
                                      void (*DebugCallback)(void *, int, const char *))
 {
     if (l_PluginInit)
@@ -142,7 +152,13 @@ EXPORT m64p_error CALL PluginStartup(m64p_dynlib_handle UNUSED(CoreLibHandle), v
     return M64ERR_SUCCESS;
 }
 
-EXPORT m64p_error CALL PluginShutdown(void)
+EXPORT m64p_error CALL 
+#ifdef M64P_STATIC_PLUGINS
+PluginShutdownRSP
+#else
+PluginShutdown
+#endif
+(void)
 {
     if (!l_PluginInit)
         return M64ERR_NOT_INIT;
@@ -155,7 +171,13 @@ EXPORT m64p_error CALL PluginShutdown(void)
     return M64ERR_SUCCESS;
 }
 
-EXPORT m64p_error CALL PluginGetVersion(m64p_plugin_type *PluginType, int *PluginVersion, int *APIVersion, const char **PluginNamePtr, int *Capabilities)
+EXPORT m64p_error CALL 
+#ifdef M64P_STATIC_PLUGINS
+PluginGetVersionRSP
+#else
+PluginGetVersion
+#endif
+(m64p_plugin_type *PluginType, int *PluginVersion, int *APIVersion, const char **PluginNamePtr, int *Capabilities)
 {
     /* set version info */
     if (PluginType != NULL)
@@ -215,7 +237,13 @@ EXPORT void CALL InitiateRSP(RSP_INFO Rsp_Info, unsigned int* UNUSED(CycleCount)
     l_ShowCFB = Rsp_Info.ShowCFB;
 }
 
-EXPORT void CALL RomClosed(void)
+EXPORT void CALL 
+#ifdef M64P_STATIC_PLUGINS
+RomClosedRSP
+#else
+RomClosed
+#endif
+(void)
 {
     /* do nothing */
 }

@@ -1,2 +1,6 @@
 /projects/unix/_obj*/
 /projects/unix/mupen64plus-rsp-hle*.so
+/projects/msvc11/Debug
+/projects/msvc11/Emscripten
+/projects/msvc11/Release
+/projects/msvc11/*.user
